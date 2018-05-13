@@ -1,0 +1,73 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class RandomBinaryTree {
+
+	/**
+	 * Lists the nodes of a random binary tree by nodes at the same depth.
+	 */
+	public void listByDepth() {
+		if (root == null) {
+			return;
+		}
+		// Use two queues that contain all nodes of current depth and next depth
+		// respectively
+		Queue<Node> currentDepth = new LinkedList<>();
+		Queue<Node> nextDepth = new LinkedList<>();
+		currentDepth.add(root);
+		while (!currentDepth.isEmpty()) {
+			// Print all nodes of current depth and at the same time, 
+			// add nodes of next depth to queue
+			while (!currentDepth.isEmpty()) {
+				Node node = currentDepth.remove();
+				System.out.format("(%d)", node.getData());
+				if (node.left != null) {
+					nextDepth.add(node.left);
+				}
+				if (node.right != null) {
+					nextDepth.add(node.right);
+				}
+			}
+			System.out.println();
+			while (!nextDepth.isEmpty()) {
+				Node node = nextDepth.remove();
+				currentDepth.add(node);
+			}
+		}
+	}
+
+	class Node {
+		int data;
+		Node left;
+		Node right;
+
+		public Node(int data) {
+			this.data = data;
+			this.left = null;
+			this.right = null;
+		}
+
+		public int getData() {
+			return data;
+		}
+	}
+
+	Node root;
+
+	void insertTestData() {
+		root = new Node(2);
+		root.left = new Node(1);
+		root.right = new Node(3);
+		root.left.left = new Node(0);
+		root.left.right = new Node(7);
+		root.right.left = new Node(9);
+		root.right.right = new Node(1);
+	}
+	
+	public static void main(String[] args) {
+		RandomBinaryTree tree = new RandomBinaryTree();
+		tree.insertTestData();
+		tree.listByDepth();
+	}
+
+}
