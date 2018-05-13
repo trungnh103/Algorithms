@@ -1,0 +1,47 @@
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
+
+public class BoardGame {
+	
+	// A map containing the result of computation with key and value are the
+	// number of spaces from the starting point to the finishing point and the
+	// number of possible ways to get there, respectively.
+	static Map<Long, BigInteger> ways = new HashMap<Long, BigInteger>();
+
+	/**
+	 * Compute number of ways to arrive at the finishing point
+	 */
+	static BigInteger computeWays(long spaces) {
+		// In order to get the result for the finishing point, we need to
+		// calculate results for all spaces from the starting point to the
+		// finishing point.
+		for (long i = 0; i <= spaces; i++)
+			ways.put(i, calcWays(i));
+		return (BigInteger) ways.get(spaces);
+	}
+
+	/**
+	 * Calculate number of ways to arrive at a certain point using formula: 
+	 * f(0) = 1 
+	 * f(n) = f(n-1) + f(n-2) + f(n-3) + f(n-4) + f(n-5) + f(n-6)
+	 */
+	static BigInteger calcWays(long n) {
+		if (n == 0)
+			return BigInteger.ONE;
+		BigInteger count = BigInteger.ZERO;
+		for (long i = 1; i <= 6 && n >= i; i++) {
+			count = count.add((BigInteger) ways.get(n - i));
+		}
+		return count;
+	}
+
+	public static void main(String[] args) {
+		// number of spaces from the starting point to the finishing point
+		long spaces = 610;
+		// print the number of ways to arrive at the finishing point
+		System.out.println("Number of ways to move " + spaces + 
+				" spaces: " + computeWays(spaces));
+	}
+
+}
