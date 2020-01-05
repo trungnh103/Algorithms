@@ -1,37 +1,26 @@
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Fibonacci {
+    // store calculated results
+    List<BigInteger> memo = new ArrayList<>();
 
-	// Caching the result
-	static Map<Integer, BigInteger> fibMap = new HashMap<Integer, BigInteger>();
+    /**
+     * Calculate fibonacci
+     * Formula: fib(n) = fib(n-1) + fib(n-2)
+     * Special cases: fib(0) = 0 and fib(1) = 1
+     */
+    BigInteger fib(int n) {
+        for (int i = memo.size(); i <= n; ++i) {
+            memo.add(i < 2 ? BigInteger.valueOf(i) : memo.get(i - 1).add(memo.get(i - 2)));
+        }
+        return memo.get(n);
+    }
 
-	/**
-	 * Calculate fibonacci
-	 */
-	static BigInteger fib(int currentNumber) {
-		int previousNumber = currentNumber;
-		// Find the latest number stored in cache. Special cases:
-		// fib(0) = 0 and fib(1) = 1
-		while (fibMap.get(previousNumber) == null && previousNumber >= 0) {
-			if (previousNumber < 2) {
-				fibMap.put(previousNumber, 
-						BigInteger.valueOf(previousNumber));
-			}
-			previousNumber--;
-		}
-		// Calculate result based on the formula:
-		// fib(n) = fib(n-1) fib(n-2)
-		for (int i = previousNumber; i < currentNumber; i++) {
-			fibMap.put(i + 1, i < 1 ? BigInteger.valueOf(i + 1) : 
-				fibMap.get(i - 1).add(fibMap.get(i)));
-		}
-
-		return fibMap.get(currentNumber);
-	}
-
-	public static void main(String[] args) {
-		System.out.format("F(8181) = %d\n", fib(8181));
-	}
+    public static void main(String[] args) {
+        Fibonacci fibonacci = new Fibonacci();
+        int n = 8181;
+        System.out.format("F(%d) = %d", n, fibonacci.fib(n));
+    }
 }
